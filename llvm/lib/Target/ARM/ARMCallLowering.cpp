@@ -219,7 +219,7 @@ void ARMCallLowering::splitToValueTypes(const ArgInfo &OrigArg,
 
     bool NeedsConsecutiveRegisters =
         TLI.functionArgumentNeedsConsecutiveRegisters(
-            SplitTy, F.getCallingConv(), F.isVarArg());
+            SplitTy, F.getCallingConv(), F.isVarArg(), DL);
     if (NeedsConsecutiveRegisters) {
       Flags.setInConsecutiveRegs();
       if (i == e - 1)
