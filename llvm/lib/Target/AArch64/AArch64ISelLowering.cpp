@@ -14710,6 +14710,18 @@ Value *AArch64TargetLowering::emitStoreConditional(IRBuilder<> &Builder,
 }
 
 bool AArch64TargetLowering::functionArgumentNeedsConsecutiveRegisters(
+    Type *Ty, CallingConv::ID CallConv, bool isVarArg) const {
+  if (Ty->isArrayTy())
+    return true;
+
+  const TypeSize &TySize = Ty->getPrimitiveSizeInBits();
+  if (TySize.isScalable() && TySize.getKnownMinSize() > 128)
+    return true;
+
+  return false;
+}
+
+bool AArch64TargetLowering::functionArgumentNeedsConsecutiveRegisters(
     Type *Ty, CallingConv::ID CallConv, bool isVarArg,
     const DataLayout &DL) const {
   if (!Ty->isArrayTy()) {

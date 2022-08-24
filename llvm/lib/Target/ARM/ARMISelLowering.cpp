@@ -18854,6 +18854,11 @@ Align ARMTargetLowering::getABIAlignmentForCallingConv(Type *ArgTy,
 bool ARMTargetLowering::functionArgumentNeedsConsecutiveRegisters(
     Type *Ty, CallingConv::ID CallConv, bool isVarArg,
     const DataLayout &DL) const {
+  return functionArgumentNeedsConsecutiveRegisters(Ty, CallConv, isVarArg);
+}
+
+bool ARMTargetLowering::functionArgumentNeedsConsecutiveRegisters(
+    Type *Ty, CallingConv::ID CallConv, bool isVarArg) const {
   if (getEffectiveCallingConv(CallConv, isVarArg) !=
       CallingConv::ARM_AAPCS_VFP)
     return false;

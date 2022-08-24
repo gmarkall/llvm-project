@@ -3954,6 +3954,12 @@ public:
   /// must be passed in a block of consecutive registers.
   virtual bool
   functionArgumentNeedsConsecutiveRegisters(Type *Ty, CallingConv::ID CallConv,
+                                            bool isVarArg) const {
+    return false;
+  }
+
+  virtual bool
+  functionArgumentNeedsConsecutiveRegisters(Type *Ty, CallingConv::ID CallConv,
                                             bool isVarArg,
                                             const DataLayout &DL) const {
     return false;

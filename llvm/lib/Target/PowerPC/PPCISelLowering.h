@@ -961,6 +961,11 @@ namespace llvm {
     bool functionArgumentNeedsConsecutiveRegisters(
         Type *Ty, CallingConv::ID CallConv, bool isVarArg,
         const DataLayout &DL) const override {
+      return functionArgumentNeedsConsecutiveRegisters(Ty, CallConv, isVarArg);
+    }
+
+    bool functionArgumentNeedsConsecutiveRegisters(
+        Type *Ty, CallingConv::ID CallConv, bool isVarArg) const override {
       // We support any array type as "consecutive" block in the parameter
       // save area.  The element type defines the alignment requirement and
       // whether the argument should go in GPRs, FPRs, or VRs if available.

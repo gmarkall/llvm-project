@@ -727,6 +727,10 @@ public:
   MachineMemOperand::Flags getTargetMMOFlags(
     const Instruction &I) const override;
 
+  bool functionArgumentNeedsConsecutiveRegisters(Type *Ty,
+                                                 CallingConv::ID CallConv,
+                                                 bool isVarArg) const override;
+
   bool functionArgumentNeedsConsecutiveRegisters(
       Type *Ty, CallingConv::ID CallConv, bool isVarArg,
       const DataLayout &DL) const override;
