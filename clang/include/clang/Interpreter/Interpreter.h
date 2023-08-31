@@ -49,7 +49,7 @@ public:
   }
 
   // General C++
-  llvm::Expected<std::unique_ptr<CompilerInstance>> CreateCpp();
+  llvm::Expected<std::unique_ptr<CompilerInstance>> CreateCpp(std::string MainExecutableName = "");
 
   // Offload options
   void SetOffloadArch(llvm::StringRef Arch) { OffloadArch = Arch; };

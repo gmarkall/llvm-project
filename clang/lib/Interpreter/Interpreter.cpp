@@ -134,13 +134,6 @@ CreateCI(const llvm::opt::ArgStringList &Argv) {
 llvm::Expected<std::unique_ptr<CompilerInstance>>
 IncrementalCompilerBuilder::create(std::vector<const char *> &ClangArgv) {
 
-  // If we don't know ClangArgv0 or the address of main() at this point, try
-  // to guess it anyway (it's possible on some platforms).
-  std::string MainExecutableName =
-      llvm::sys::fs::getMainExecutable(nullptr, nullptr);
-
-  ClangArgv.insert(ClangArgv.begin(), MainExecutableName.c_str());
-
   // Prepending -c to force the driver to do something if no action was
   // specified. By prepending we allow users to override the default
   // action and use other actions in incremental mode.
@@ -179,9 +172,16 @@ IncrementalCompilerBuilder::create(std::vector<const char *> &ClangArgv) {
 }
 
 llvm::Expected<std::unique_ptr<CompilerInstance>>
-IncrementalCompilerBuilder::CreateCpp() {
+IncrementalCompilerBuilder::CreateCpp(std::string MainExecutableName) {
   std::vector<const char *> Argv;
   Argv.reserve(5 + 1 + UserArgs.size());
+
+  // If we don't know ClangArgv0 or the address of main() at this point, try
+  // to guess it anyway (it's possible on some platforms).
+  if (MainExecutableName.empty())
+    MainExecutableName = llvm::sys::fs::getMainExecutable(nullptr, nullptr);
+
+  Argv.push_back(MainExecutableName.c_str());
   Argv.push_back("-xc++");
   Argv.insert(Argv.end(), UserArgs.begin(), UserArgs.end());
 
