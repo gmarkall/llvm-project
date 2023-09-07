@@ -49,13 +49,15 @@ public:
   }
 
   // General C++
-  llvm::Expected<std::unique_ptr<CompilerInstance>> CreateCpp(std::string MainExecutableName = "");
+  llvm::Expected<std::unique_ptr<CompilerInstance>> CreateCpp();
 
   // Offload options
   void SetOffloadArch(llvm::StringRef Arch) { OffloadArch = Arch; };
 
   // CUDA specific
   void SetCudaSDK(llvm::StringRef path) { CudaSDKPath = path; };
+
+  void SetMainExecutableName(std::string name) { MainExecutableName = name; }
 
   llvm::Expected<std::unique_ptr<CompilerInstance>> CreateCudaHost();
   llvm::Expected<std::unique_ptr<CompilerInstance>> CreateCudaDevice();
@@ -70,6 +72,7 @@ private:
 
   llvm::StringRef OffloadArch;
   llvm::StringRef CudaSDKPath;
+  std::string MainExecutableName;
 };
 
 /// Provides top-level interfaces for incremental compilation and execution.

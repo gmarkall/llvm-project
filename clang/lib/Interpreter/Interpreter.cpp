@@ -172,7 +172,7 @@ IncrementalCompilerBuilder::create(std::vector<const char *> &ClangArgv) {
 }
 
 llvm::Expected<std::unique_ptr<CompilerInstance>>
-IncrementalCompilerBuilder::CreateCpp(std::string MainExecutableName) {
+IncrementalCompilerBuilder::CreateCpp() {
   std::vector<const char *> Argv;
   Argv.reserve(5 + 1 + UserArgs.size());
 
@@ -193,6 +193,12 @@ IncrementalCompilerBuilder::createCuda(bool device) {
   std::vector<const char *> Argv;
   Argv.reserve(5 + 4 + UserArgs.size());
 
+  // If we don't know ClangArgv0 or the address of main() at this point, try
+  // to guess it anyway (it's possible on some platforms).
+  if (MainExecutableName.empty())
+    MainExecutableName = llvm::sys::fs::getMainExecutable(nullptr, nullptr);
+
+  Argv.push_back(MainExecutableName.c_str());
   Argv.push_back("-xcuda");
   if (device)
     Argv.push_back("--cuda-device-only");
